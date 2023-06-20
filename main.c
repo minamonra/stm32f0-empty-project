@@ -3,7 +3,6 @@ void main(void) {
 	// setup a status LED
 	gpio_setup(PB3, OUTPUT, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF0);
 
-	// blink it forever, really fast
 	// PWM ~19,2 kHz 50/50 0...50, PB6
 	timer_pwm_setup(TIM16, 50, 50, ONE_CHANNEL, PB6);
 	timer_pwm_period(TIM16, 50);
