@@ -80,8 +80,11 @@ void timer_pwm_setup(TIM_TypeDef *timer, uint32_t prescaler, uint32_t arr, enum 
 		case ONE_CHANNEL:
 			timer->CCMR1 |= TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_2;	// OC1M = 110 for PWM Mode 1 output on ch1
 			timer->CCMR1 |= TIM_CCMR1_OC1PE;						// Output 1 preload enable
-			timer->CCER |= TIM_CCER_CC1E;							// Enable output for ch1
-			timer->CCR1 = 0;										// 0% duty cycle for ch1
+			if((timer == TIM16) || (timer == TIM17))					// TIM16/TIM17 CH1N
+                          timer->CCER |= TIM_CCER_CC1NE;						// Enable output for ch1n
+                        else 
+                          timer->CCER |= TIM_CCER_CC1E;                                                 // Enable output for ch1
+			timer->CCR1 = 0;								// 0% duty cycle
 		break;
 	}
 
@@ -90,7 +93,7 @@ void timer_pwm_setup(TIM_TypeDef *timer, uint32_t prescaler, uint32_t arr, enum 
 	timer->SR &= ~TIM_SR_UIF;
 
 	// main output enable is only needed for advanced control timers
-	if(timer == TIM1)
+	if((timer == TIM1) || (timer == TIM16) || (timer == TIM17))
 		timer->BDTR |= TIM_BDTR_MOE;
 
 	// enable counter
@@ -126,27 +129,15 @@ void timer_pwm_setup(TIM_TypeDef *timer, uint32_t prescaler, uint32_t arr, enum 
 			gpio_setup(ch1, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF4);
 		else if(ch1 == PB1)
 			gpio_setup(ch1, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF0);
-	} else if(timer == TIM15) {
-		if(ch1 == PA2)
-			gpio_setup(ch1, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF0);
-		else if(ch1 == PB14)
-			gpio_setup(ch1, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF1);
-		if(channels == TWO_CHANNELS) {
-			enum GPIO_PIN temp = va_arg(arglist, int);
-			if(temp == PA3)
-				gpio_setup(temp, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF0);
-			else if(temp == PB15)
-				gpio_setup(temp, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF1);
-		}
 	} else if(timer == TIM16) {
 		if(ch1 == PA6)
 			gpio_setup(ch1, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF5);
-		else if(ch1 == PB8)
+		else if(ch1 == PB6)
 			gpio_setup(ch1, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF2);
 	} else if(timer == TIM17) {
 		if(ch1 == PA7)
 			gpio_setup(ch1, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF5);
-		else if(ch1 == PB9)
+		else if(ch1 == PB7)
 			gpio_setup(ch1, AF, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF2);
 	}
 }
