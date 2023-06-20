@@ -15,8 +15,8 @@ void main(void) {
 	timer_pwm_value(TIM17, CH1, 25);
 
 	while(1) {
-		gpio_high(PC2);
-		gpio_low(PC2);
+		gpio_high(PB3);
+		gpio_low(PB3);
 	}
 
 }
