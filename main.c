@@ -1,7 +1,6 @@
 void main(void) {
 
 	// setup a status LED
-	gpio_setup(PC2, OUTPUT, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF0);
 	gpio_setup(PB3, OUTPUT, PUSH_PULL, FIFTY_MHZ, NO_PULL, AF0);
 
 	// blink it forever, really fast
