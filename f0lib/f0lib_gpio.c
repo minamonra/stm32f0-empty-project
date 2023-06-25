@@ -28,7 +28,7 @@ void gpio_setup(enum GPIO_PIN	pin,
 	uint32_t regValue = 0;
 
 	// sanity check
-	if(port == 4) return;												// no port e
+	if(port == 4) return;										// no port e
 	if(port == 3 && pinNum != 2) return;								// port d only has a pin 2
 	if(port == 5 && (pinNum == 2 || pinNum == 3 || pinNum > 7)) return;	// port f has no pins 2,3,8+
 	
@@ -47,14 +47,6 @@ void gpio_setup(enum GPIO_PIN	pin,
 		case 2: // C
 			RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
 			baseAddr = (uint32_t *) 0x48000800;
-			break;
-		case 3: // D
-			RCC->AHBENR |= RCC_AHBENR_GPIODEN;
-			baseAddr = (uint32_t *) 0x48000C00;
-			break;
-		case 5: // F
-			RCC->AHBENR |= RCC_AHBENR_GPIOFEN;
-			baseAddr = (uint32_t *) 0x48001400;
 			break;
 	}
 
@@ -234,12 +226,6 @@ void gpio_low(enum GPIO_PIN pin) {
 		case 2: // C
 			GPIOC->BRR = (1 << pinNum);
 			break;
-		case 3: // D
-			GPIOD->BRR = (1 << pinNum);
-			break;
-		case 5: // F
-			GPIOF->BRR = (1 << pinNum);
-			break;
 	}
  }
 
@@ -264,12 +250,6 @@ void gpio_high(enum GPIO_PIN pin) {
 			break;
 		case 2: // C
 			GPIOC->BSRR = (1 << pinNum);
-			break;
-		case 3: // D
-			GPIOD->BSRR = (1 << pinNum);
-			break;
-		case 5: // F
-			GPIOF->BSRR = (1 << pinNum);
 			break;
 	}
  }
